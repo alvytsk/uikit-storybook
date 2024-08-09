@@ -1,0 +1,27 @@
+# Use Node.js for Storybook build
+FROM node:20-alpine AS storybook-builder
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy the rest of the application files
+COPY . .
+
+# Build Storybook
+RUN npm run build-storybook
+
+# Stage 2: Serve the built Storybook
+FROM nginx:alpine
+
+# Copy the built Storybook from the previous stage
+COPY --from=storybook-builder /app/storybook-static /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
