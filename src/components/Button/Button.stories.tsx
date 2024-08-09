@@ -16,6 +16,9 @@ type Story = StoryObj<typeof Button>;
 export const Default: Story = {
   args: {
     children: 'Click me',
+    loading: false,
+    disabled: false,
+    className: "bg-yellow-600 "
   },
 };
 
